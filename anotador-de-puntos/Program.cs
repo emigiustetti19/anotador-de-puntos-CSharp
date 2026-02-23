@@ -124,7 +124,7 @@ class Marcador
     void ModifyPoints()
     {
         string? entrada;
-        int numero;
+        int numero = 0;
         int modificacion;
 
         List<string> playerNames = new List<string>(players.Keys);
@@ -140,7 +140,17 @@ class Marcador
             }
 
             Console.Write("Seleccionar numero de jugador (Enter vacío para salir): ");
-            entrada = Console.ReadLine();
+            while(true)
+            {
+                entrada = Console.ReadLine()!;
+                if (string.IsNullOrEmpty(entrada))
+                    break;
+                else if (int.TryParse(entrada, out numero) && numero > 0 && numero <= players.Count)
+                    break;
+                else
+                    Console.WriteLine("Opcion no válida.");
+            }
+            /*entrada = Console.ReadLine();
             while (int.TryParse(entrada, out numero))
             {
                 if (numero > 0 && numero <= players.Count)
@@ -148,14 +158,27 @@ class Marcador
                 else if (numero <= 0 || numero > players.Count)
                     Console.WriteLine("Número no válido.");
                 entrada = Console.ReadLine();
-            }
+            }*/
             if (entrada == "")
                 break;
             else
             {
                 Console.Clear();
-                Console.WriteLine($"Sumar o restar puntos de {playerNames[numero - 1]}: )");
-                modificacion = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine($"Sumar o restar puntos de {playerNames[numero - 1]}: ");
+
+                while (true)
+                {
+                    string entradaPuntos = Console.ReadLine()!;
+
+                    if (int.TryParse(entradaPuntos, out modificacion))
+                        break;
+                    else
+                    {
+                        Console.WriteLine("Error, ingresar solo números enteros.");
+                        Console.Write("Puntos a modificar: ");
+                    }
+                }
+
                 players[playerNames[numero - 1]] += modificacion;
             }
         } while (!string.IsNullOrEmpty(entrada));
